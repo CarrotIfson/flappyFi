@@ -30,7 +30,7 @@ contract Vault is Ownable, AccessControlEnumerable {
     function deposit(uint256 _amount) external {
         require(
             token.balanceOf(msg.sender) >= _amount,
-            "Insufficiente account baalance"
+            "Insufficient account balance"
         );
         SafeERC20.safeTransferFrom(token, msg.sender, address(this), _amount);
     }
