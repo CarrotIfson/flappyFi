@@ -60,6 +60,11 @@ describe("Vault", function () {
         await vault.connect(bob).withdraw(parseEther(300*10**3), bob.address); 
         expect(await token.balanceOf(vault.address)).equal(parseEther(200*10**3)); 
         expect(await token.balanceOf(bob.address)).equal(parseEther(300*10**3));
+
+        //case for owner
+        await vault.connect(owner).withdraw(parseEther(200*10**3), bob.address); 
+        expect(await token.balanceOf(vault.address)).equal(parseEther(0*10**3)); 
+        expect(await token.balanceOf(bob.address)).equal(parseEther(500*10**3));
     });
 
 
@@ -77,7 +82,7 @@ describe("Vault", function () {
         await token.transfer(alice.address, parseEther(1 * 10**6)); 
         await token.connect(alice).approve(vault.address, token.balanceOf(alice.address));  
         await vault.connect(alice).deposit(parseEther(1*10**6));
-        await expect(vault.connect(alice).withdraw(parseEther(1*10*3), alice.address)).revertedWith("Caller is not a withdrawer");    
+        await expect(vault.connect(alice).withdraw(parseEther(1*10**3), alice.address)).revertedWith("Caller is not a withdrawer");    
     });
 
     it("Should FAIL to withdraw, Withdraw is not enabled", async() => {  
@@ -88,13 +93,13 @@ describe("Vault", function () {
         await token.transfer(alice.address, parseEther(1 * 10**6)); 
         await token.connect(alice).approve(vault.address, token.balanceOf(alice.address));  
         await vault.connect(alice).deposit(parseEther(1*10**6));
-        await expect(vault.connect(alice).withdraw(parseEther(1*10*3), alice.address)).revertedWith("Withdraw is not enabled");     
-
+        await expect(vault.connect(alice).withdraw(parseEther(1*10**3), alice.address)).revertedWith("Withdraw is not enabled");     
+        //enable should succeed
         await vault.setWithdrawEnabled(true);
         await vault.connect(alice).withdraw(parseEther(0), alice.address);
- 
+        //when disabled should fail again
         await vault.setWithdrawEnabled(false);
-        await expect(vault.connect(alice).withdraw(parseEther(1*10*3), alice.address)).revertedWith("Withdraw is not enabled");  
+        await expect(vault.connect(alice).withdraw(parseEther(1*10**3), alice.address)).revertedWith("Withdraw is not enabled");  
     });
 
     it("Should FAIL to withdraw, Amount should be lower than maxWithdrawalAmount", async() => {  
@@ -106,15 +111,28 @@ describe("Vault", function () {
         await token.transfer(alice.address, parseEther(1 * 10**6)); 
         await token.connect(alice).approve(vault.address, token.balanceOf(alice.address));  
         await vault.connect(alice).deposit(parseEther(1*10**6));
-        await expect(vault.connect(alice).withdraw(parseEther(1*10*3), alice.address)).revertedWith("Amount should be lower than maxWithdrawalAmount");   
-
+        await expect(vault.connect(alice).withdraw(parseEther(1*10**3), alice.address)).revertedWith("Amount should be lower than maxWithdrawalAmount");   
+        //when enabled, should withdraw
         await vault.setMaxWithdrawalAmount(parseEther(10));
         await vault.connect(alice).withdraw(parseEther(10), alice.address);
 
-        await vault.setMaxWithdrawalAmount(parseEther(0));
-        await expect(vault.connect(alice).withdraw(parseEther(1*10*3), alice.address)).revertedWith("Amount should be lower than maxWithdrawalAmount");     
+        //when disabled, should fail again
+        await vault.setMaxWithdrawalAmount(parseEther(1));
+        await expect(vault.connect(alice).withdraw(parseEther(1*10**3), alice.address)).revertedWith("Amount should be lower than maxWithdrawalAmount");     
     });
 
+    it("Should FAIL to withdraw, ERC20: transfer amount exceeds balance", async() => {  
+        //grant withdrawer role to alice
+        let WITHDRAWER_ROLE = keccak256(Buffer.from("WITHDRAWER_ROLE")).toString();
+        await vault.grantRole(WITHDRAWER_ROLE, alice.address); 
+        await vault.setWithdrawEnabled(true);
+        await vault.setMaxWithdrawalAmount(parseEther(10 * 10**6));
+
+        await token.transfer(alice.address, parseEther(1 * 10**6)); 
+        await token.connect(alice).approve(vault.address, token.balanceOf(alice.address));  
+        await vault.connect(alice).deposit(parseEther(1*10**6));
+        await expect(vault.connect(alice).withdraw(parseEther(2*10**6), alice.address)).revertedWith("ERC20: transfer amount exceeds balance");     
+    });
 
 
     

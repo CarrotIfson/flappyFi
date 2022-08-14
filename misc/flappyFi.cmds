@@ -1,0 +1,45 @@
+## SCS ######################################################
+
+npm init -y
+npm install --save-dev hardhat
+npx hardhat (no toolbox)
+#add to package.json from misc/package.json
+npm install 
+
+#.env
+#hardhat.config.ts 
+
+npm install --save-dev --force dotenv 
+npm install --save-dev --force @typechain/ethers-v5 
+npm install --save-dev --force typechain-target-ethers-v5
+
+npm install --save-dev --force @typechain/hardhat  
+npm install --save-dev --force @nomicfoundation/hardhat-network-helpers
+npm install --save-dev --force @nomicfoundation/hardhat-chai-matchers
+ 
+ 
+#scripts/config.ts
+#./config.json
+
+npx hardhat compile
+yarn compile
+yarn test
+yarn deploy {ntwrk}
+yarn verify {ntwrk} {addr}
+
+##############################################################
+## API #######################################################
+mkdir contracts
+mkdir controllers
+mkdir data
+mkdir routes
+
+touch server.js
+
+npm init
+  "dependencies": {
+      "dotenv": "^16.0.0",
+      "sqlite3": "^5.0.7",
+      "web3": "^1.7.3"
+   }
+npm install

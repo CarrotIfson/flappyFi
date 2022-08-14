@@ -13,7 +13,7 @@ export function getConfig() {
 }
 
 export function setConfig(path: string, val: string) {
-    console.log(config);
+    //console.log(config);
     const splitPath = path.split('.').reverse()
 
     var ref = config;
