@@ -1,23 +1,24 @@
 const sqlite3 = require('sqlite3').verbose();
 
-// create empty database
-function CreateRawDB() {
-    let newDB = new sqlite3.Database('../flappyFinance.db', (err) => {
+
+/// Create new Raw Database
+function CreateRawDB(){
+    let newDB = new sqlite3.Database('../floppyBird.db', (err) => {
         if (err) {
-            console.log('Can not create database', err);
+          console.log('Could not connect to database', err)
         } else {
-            console.log('Database created successfully');
+          console.log('Connected to database');
         }
-    });
-    try {
+      });
+      try{
         DatabaseInit(newDB);
-    } catch(err)
-    {
+      }catch(err)
+      {
         console.log(err);
-    }
+      }
 }
 
-// Create tables 
+// Init Database tables in the database
 function DatabaseInit(db) {
     db.serialize(() => {
         let tbl_player_vault_ddl = 
@@ -50,11 +51,14 @@ function DatabaseInit(db) {
             player_point INTEGER DEFAULT 0,
             status INTEGER
         );`
+    
         db.run(tbl_player_vault_ddl);
+    
         db.run(tbl_vault_transaction);
-        db.run(tbl_player_match);  
+    
+        db.run(tbl_player_match);
     });
 }
- 
 CreateRawDB();
-module.exports = DatabaseInit;
+module.exports.DatabaseInit = DatabaseInit;
+
