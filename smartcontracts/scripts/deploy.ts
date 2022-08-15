@@ -1,6 +1,6 @@
 import { ethers, hardhatArguments } from "hardhat";
 import  * as Config from "./config";
-
+ 
 async function main() {
   await Config.initConfig();
   const network = hardhatArguments.network ? hardhatArguments.network : 'dev';

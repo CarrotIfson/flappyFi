@@ -43,3 +43,17 @@ npm init
       "web3": "^1.7.3"
    }
 npm install
+
+data/MigrationsContext.js -> creates database + tables
+data/cStoreCommand.js -> class that contains sql queries
+data/FloppyBirdDAO.js -> set of functions to interact with backend db using cStoreCommand
+data/SmartContractDAO.js -> set of web3 functions
+Requires ABI on contracts/{contractName}.json
+and Address on .env
+
+controllers/APIController.js
+
+routes/APIRoutes.js -> maps the requests to the specific endpoint
+server.js -> uses express framework
+
+node server.js

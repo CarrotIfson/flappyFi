@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3');
 const StoreCommand = require('./cStoreCommand');
 const cStoreCommand = new StoreCommand.cStoreCommand();
-class FloppyBirdDAO {
+class FloppybirdDAO {
   constructor(dbFilePath) {
     this.db = new sqlite3.Database(dbFilePath, (err) => {
       if (err) {
@@ -117,7 +117,8 @@ class FloppyBirdDAO {
       $end_time: date
       };
     console.log(data);
-    
+    console.log(wallet_id)
+
     let result = await this.RunCommand(cStoreCommand.EndPlayerMatchCommand, data);
         if(result == null || result.length == 0)
         return null;
@@ -125,4 +126,4 @@ class FloppyBirdDAO {
   }
 }
 
-module.exports = FloppyBirdDAO;
+module.exports = FloppybirdDAO;
