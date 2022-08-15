@@ -5,11 +5,13 @@ const vaultabi = require('../contracts/vault.json');
 
 class SmartContractDAO {
     constructor() {
+        console.log("In SmartContactDAO constructor");
         this.web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
         this.token_address = process.env.TOKEN_ADDRESS;
         this.vault_address = process.env.VAULT_ADDRESS;
         this.withdrawer_private_key = process.env.WITHDRAWER_PRIVATE_KEY;
         this.withdrawer_address = process.env.WITHDRAWER_ADDRESS; 
+        console.log(this.withdrawer_private_key);
     }
 
     // Retrieve the FLP balance

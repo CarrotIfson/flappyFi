@@ -57,3 +57,14 @@ routes/APIRoutes.js -> maps the requests to the specific endpoint
 server.js -> uses express framework
 
 node server.js
+
+
+
+
+##############################################################
+## FRONT #####################################################
+flappy bird clone:
+   https://github.com/nebez/floppybird.git
+
+game/js/jquery-ui.min.js  -> contains transition effects
+game/js/web3/api.js -> interaction with api
